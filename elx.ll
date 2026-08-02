@@ -1,0 +1,42 @@
+;When I started working on this project, only god knew how it worked. Today. Nothing has changed
+;Anyone contributing to this, increse the counter. ty
+;
+;Total hours wasted on this dumpsterfire: 0
+;
+;Implemented with x86_64 asm
+
+;implementing a syscall wrapper
+define i64 @syscall(i64 %call, i64 %rdi, i64 %rsi, i64 %rdx, i64 %r10, i64 %r8, i64 %r9) alwaysinline {
+  %rax = call i64 asm sideeffect "syscall", "={rax},{rax},{rdi},{rsi},{rdx},{r10},{r8},{r9},~{rcx},~{r11}"(i64 %call, i64 %rdi, i64 %rsi, i64 %rdx, i64 %r10, i64 %r8, i64 %r9)
+  ret i64 %rax
+}
+
+;stating main exsists somewhere
+declare i64 @main(i64, ptr)
+
+;start
+define void @_start() naked {
+  ;zero rbp
+  call void asm sideeffect "", "{rbp}"(i64 0)
+  ;loading rsp
+  %rsp = call void asm "", "={rsp},{rsp}"(ptr undef)
+
+  ;deref rsp to get argc
+  %argc = load i64, ptr %rsp
+  ;compute address of argv
+  %argv = getelementptr i8, ptr %rsp, i64 8
+
+  ;calling main
+  %ec = call i64 @main(i64 %argc, ptr %argv)
+  call void @exit(i64 %ec)
+  unreachable
+}
+
+;exiting
+define void @exit(i64 %exitcode) alwaysinline noreturn {
+  call i64 @syscall(i64 60, i64 %exitcode, i64 undef, i64 undef, i64 undef, i64 undef, i64 undef)
+
+  ;stuff i need to sleep at night
+  call void asm sideeffect "hlt", ""() noreturn
+  unreachable
+}
