@@ -9,3 +9,17 @@ This lib is implemented with `x86_64 asm`.
 make        #builds obj files inside of build/, and also the libelx.a
 make clean  #cleans up build and libelx
 ```
+
+
+### Function call table (with c style function declaration)
+elx.ll -> runtime
+
+**stdio.ll**
+```c
+int puts(char *str);
+```
+
+**string.ll**
+```c
+int strlen(char *str);
+```
