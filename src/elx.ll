@@ -1,4 +1,4 @@
-;When I started working on this project, only god knew how it worked. Today. Nothing has changed
+;When I started working on this project, only god knew how it worked. Today, Nothing has changed
 ;Anyone contributing to this, increse the counter. ty
 ;
 ;Total hours wasted on this dumpsterfire: 2
@@ -19,7 +19,7 @@ define void @_start() naked {
   ;zero rbp
   call void asm sideeffect "", "{rbp}"(i64 0)
   ;loading rsp
-  %rsp = call void asm "", "={rsp},{rsp}"(ptr undef)
+  %rsp = call ptr asm "", "={rsp},{rsp}"(ptr undef)
 
   ;deref rsp to get argc
   %argc = load i64, ptr %rsp
