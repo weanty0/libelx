@@ -13,7 +13,7 @@ define external i64 @putchar(i64 %char) {
   br i1 %is.successful, label %return, label %err
 return:
   ;return the char written
-  ret i64 %c
+  ret i64 %char
 err:
   ;return -1
   ret i64 -1

@@ -16,6 +16,7 @@ elx.ll -> runtime
 
 **stdio.ll**
 ```c
+int putchar(int char);
 int puts(char *str);
 ```
 
