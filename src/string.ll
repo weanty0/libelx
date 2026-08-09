@@ -1,7 +1,7 @@
 ;stringy shit
 ;string.h
 
-;int strlen(char* str);
+;size_t strlen(char* str);
 define external i64 @strlen(ptr %str) {
 entry:
   br label %loop

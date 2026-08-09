@@ -24,3 +24,9 @@ int puts(char *str);
 ```c
 int strlen(char *str);
 ```
+
+**math.ll**
+```c
+int dabs(int n);
+double fabs(double n);
+```
