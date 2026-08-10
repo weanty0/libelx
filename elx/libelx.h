@@ -1,21 +1,23 @@
 #ifndef LIBELX_H
 #define LIBELX_H
 
+#define size_t unsigned long
+
 //  elx.o
-void exit(long exitcode);
+void exit(int exitcode);
 
 //  stdlib.o
 
 //  stdio.o
-long putchar(long chr);
-long puts(char *str);
+int putchar(int chr);
+int puts(char *str);
 
 //  math.o
-long dabs(long n);
+int dabs(int n);
 double fabs(double n);
 
 //  string.o
-long strlen(char *str);
+size_t strlen(char *str);
 
 //  etypes.o
 

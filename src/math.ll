@@ -1,14 +1,14 @@
 ; BigJ would be proud
 
 ; int dabs(int n);
-define i64 @dabs(i64 %n) {
-  %is.neg = icmp slt i64 %n, 0
+define i32 @dabs(i32 %n) {
+  %is.neg = icmp slt i32 %n, 0
   br i1 %is.neg, label %nret, label %pret
 nret:
-  %p.n = mul i64 %n, -1
-  ret i64 %p.n
+  %p.n = mul i32 %n, -1
+  ret i32 %p.n
 pret:
-  ret i64 %n
+  ret i32 %n
 }
 
 ; double fabs(double n);
