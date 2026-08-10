@@ -10,23 +10,37 @@ make        #builds obj files inside of build/, and also the libelx.a
 make clean  #cleans up build and libelx
 ```
 
+### Using libelx in with C
+Example hello world
+```c
+#include "../elx/stdio.h"
+
+long main(long argc, char **argv) {
+  puts("Hello, World!\n");
+  return 0;
+}
+```
+Compilation
+```sh
+gcc -ffreestanding -nostdlib -static -no-pie -e _start main.c libelx.a -o main
+```
 
 ### Function call table (with c style function declaration)
 elx.ll -> runtime
 
 **stdio.ll**
 ```c
-int putchar(int char);
-int puts(char *str);
+long putchar(int char);
+long puts(char *str);
 ```
 
 **string.ll**
 ```c
-int strlen(char *str);
+long strlen(char *str);
 ```
 
 **math.ll**
 ```c
-int dabs(int n);
+long dabs(long n);
 double fabs(double n);
 ```

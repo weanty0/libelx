@@ -1,10 +1,10 @@
 ;basically stdio.ll
 
 ;int putchar(int c);
-define external i64 @putchar(i64 %char) {
+define external i64 @putchar(i64 %chr) {
   ;truncating the 64 bit int to a char
   %buf = alloca i8
-  %c = trunc i64 %char to i8
+  %c = trunc i64 %chr to i8
   store i8 %c, ptr %buf
 
   ;writing
@@ -13,7 +13,7 @@ define external i64 @putchar(i64 %char) {
   br i1 %is.successful, label %return, label %err
 return:
   ;return the char written
-  ret i64 %char
+  ret i64 %chr
 err:
   ;return -1
   ret i64 -1
