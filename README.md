@@ -32,6 +32,7 @@ elx.ll -> runtime
 ```c
 int putchar(int char);
 int puts(char *str);
+int getchar(void);
 ```
 
 **string.ll**
