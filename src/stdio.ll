@@ -19,6 +19,16 @@ err:
   ret i32 -1
 }
 
+;yanking the character entered
+;int getchar(void);
+define i32 @getchar() {
+  %char = alloca [ 1 x i8 ]
+  call i64 @read(i64 0, ptr %char, i64 1)
+  %chr.ptr = getelementptr i32, ptr %char, i64 0
+  %chr = load i32, ptr %chr.ptr
+  ret i32 %chr
+}
+
 ;int puts(char* str)
 define external i32 @puts(ptr %str) {
   %len = call i64 @strlen(ptr %str)
@@ -30,3 +40,4 @@ define external i32 @puts(ptr %str) {
 
 declare i64 @strlen(ptr)
 declare i64 @write(i64, ptr, i64)
+declare i64 @read(i64, ptr, i64)

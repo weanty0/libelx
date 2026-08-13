@@ -17,6 +17,7 @@ size_t read(unsigned int fd, char *buf, size_t count);
 //  stdio.o
 int putchar(int chr);
 int puts(char *str);
+int getchar(void);
 
 //  math.o
 int dabs(int n);
