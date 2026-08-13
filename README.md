@@ -10,7 +10,7 @@ make        #builds obj files inside of build/, and also the libelx.a
 make clean  #cleans up build and libelx
 ```
 
-### Using libelx in with C
+### Using libelx in C
 Example hello world
 ```c
 #include "../elx/stdio.h"
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 ```
 Compilation
 ```sh
-gcc -ffreestanding -nostdlib -static -no-pie -e _start main.c libelx.a -o main
+gcc -ffreestanding -nostdlib -static -no-pie -fno-stack-protector -e _start main.c libelx.a -o main
 ```
 
 ### Function call table (with c style function declaration)

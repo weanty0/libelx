@@ -53,3 +53,10 @@ define i64 @write(i64 %fd, ptr %buf, i64 %count) {
   %nob.w = call i64 @syscall(i64 1, i64 %fd, ptr %buf, i64 %count, i64 undef, i64 undef, i64 undef)
   ret i64 %nob.w
 }
+
+;read for getchar etc..
+define i64 @read(i64 %fd, ptr %buf, i64 %count) {
+  ;number of bytes read
+  %nob.r = call i64 @syscall(i64 0, i64 %fd, ptr %buf, i64 %count, i64 undef, i64 undef, i64 undef)
+  ret i64 %nob.r
+}

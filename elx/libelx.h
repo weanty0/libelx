@@ -3,8 +3,14 @@
 
 #define size_t unsigned long
 
+#define stdin 0
+#define stdout 1
+#define stderr 2
+
 //  elx.o
 void exit(int exitcode);
+size_t write(unsigned int fd, char *buf, size_t count);
+size_t read(unsigned int fd, char *buf, size_t count);
 
 //  stdlib.o
 
