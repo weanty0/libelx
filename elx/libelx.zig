@@ -7,7 +7,7 @@ pub extern fn read(fd: c_ulong, buf: [*]u8, count: usize) isize;
 
 // stdio.ll
 pub extern fn getchar(void) i32;
-pub extern fn putchar(chr: i32);
+pub extern fn putchar(chr: i32) i32;
 pub extern fn puts(str: [*:0]const u8) i32;
 
 // math.ll
