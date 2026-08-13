@@ -2,6 +2,7 @@
 #define LIBELX_H
 
 #define size_t unsigned long
+#define ssize_t signed long
 
 #define stdin 0
 #define stdout 1
@@ -9,8 +10,8 @@
 
 //  elx.o
 void exit(int exitcode);
-size_t write(unsigned int fd, char *buf, size_t count);
-size_t read(unsigned int fd, char *buf, size_t count);
+ssize_t write(unsigned int fd, char *buf, size_t count);
+ssize_t read(unsigned int fd, char *buf, size_t count);
 
 //  stdlib.o
 
