@@ -13,7 +13,7 @@ make clean  #cleans up build and libelx
 ### Using libelx in C
 Example hello world
 ```c
-#include "../elx/stdio.h"
+#include "libelx.h"
 
 int main(int argc, char *argv[]) {
   puts("Hello, World!\n");
@@ -38,6 +38,8 @@ int getchar(void);
 **string.ll**
 ```c
 size_t strlen(char *str);
+char *strcpy(char *dest, char *str);
+int strcmp(char *a, char *b)
 ```
 
 **math.ll**
