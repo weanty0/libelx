@@ -32,3 +32,24 @@ loop:
 return:
   ret ptr %dest
 }
+
+;int strcmp(char *s1, char *s2);
+define external i32 @strcmp(ptr %a, ptr %b) {
+entry:
+  br label %loop
+loop:
+  %i = phi i64 [ 0, %entry ], [ %i.next, %loop.pst ]
+  %i.next = add i64 %i, 1
+  %a.p = getelementptr i8, ptr %a, i64 %i
+  %b.p = getelementptr i8, ptr %b, i64 %i
+  %c.a = load i8, ptr %a.p
+  %c.b = load i8, ptr %b.p
+  %is.eq = icmp eq i8 %c.a, %c.b
+  br i1 %is.eq, label %loop.pst, label %return
+loop.pst:
+  %is.null = icmp eq i8 %c.a, 0
+  br i1 %is.null, label %return, label %loop
+return:
+  %rval = phi i32 [ 0, %loop.pst ], [ 1, %loop ]
+  ret i32 %rval
+}
