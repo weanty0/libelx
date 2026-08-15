@@ -26,7 +26,12 @@ gcc -ffreestanding -nostdlib -static -no-pie -fno-stack-protector -e _start main
 ```
 
 ### Function call table (with c style function declaration)
-elx.ll -> runtime
+**elx.ll**
+```c
+void exit(int exitcode);
+ssize_t write(unsigned int fd, char *buf, size_t count);
+ssize_t read(unsigned int fd, char *buf, size_t count);
+```
 
 **stdio.ll**
 ```c
