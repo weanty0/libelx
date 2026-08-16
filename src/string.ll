@@ -53,3 +53,22 @@ return:
   %rval = phi i32 [ 0, %loop.pst ], [ 1, %loop ]
   ret i32 %rval
 }
+
+;char *strcat(char *dest, char *src);
+define external ptr @strcat(ptr %dest, ptr %src) {
+entry:
+  %dest.len = call i64 @strlen(ptr %dest)
+  %dest.strt = getelementptr i8, ptr %dest, i64 %dest.len
+  br label %loop
+loop:
+  %i = phi i64 [ 0, %entry ], [ %i.next, %loop ]
+  %i.next = add i64 %i, 1
+  %src.p = getelementptr i8, ptr %src, i64 %i
+  %char = load i8, ptr %src.p
+  %dest.p = getelementptr i8, ptr %dest.strt, i64 %i
+  store i8 %char, ptr %dest.p
+  %is.null = icmp eq i8 %char, 0
+  br i1 %is.null, label %return, label %loop
+return:
+  ret ptr %dest
+}

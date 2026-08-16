@@ -21,7 +21,7 @@ err:
 
 ;yanking the character entered
 ;int getchar(void);
-define i32 @getchar() {
+define external i32 @getchar() {
   %char = alloca [ 1 x i8 ]
   call i64 @read(i64 0, ptr %char, i64 1)
   %chr.ptr = getelementptr i32, ptr %char, i64 0
