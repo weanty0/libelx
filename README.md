@@ -11,14 +11,9 @@ make clean  #cleans up build and libelx
 ```
 
 ### Using libelx in C
-Example hello world
+You only have to import the .h file
 ```c
 #include "libelx.h"
-
-int main(int argc, char *argv[]) {
-  puts("Hello, World!\n");
-  return 0;
-}
 ```
 Compilation
 ```sh
@@ -44,6 +39,7 @@ int getchar(void);
 ```c
 size_t strlen(char *str);
 char *strcpy(char *dest, char *str);
+char *strcat(char *dest, char *str);
 int strcmp(char *a, char *b)
 ```
 

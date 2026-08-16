@@ -27,6 +27,7 @@ double fabs(double n);
 //  string.o
 size_t strlen(char *str);
 char *strcpy(char *dest, char *str);
+char *strcat(char *dest, char *str);
 int strcmp(char *a, char *b)
 
 //  etypes.o
