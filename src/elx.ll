@@ -37,9 +37,8 @@ define void @_start() naked {
 }
 
 ;exiting
-define void @exit(i32 %ec) alwaysinline noreturn {
-  %exitcode = zext i32 %ec to i64
-  call i64 @syscall(i64 60, i64 %exitcode, i64 undef, i64 undef, i64 undef, i64 undef, i64 undef)
+define void @exit(i64 %ec) alwaysinline noreturn {
+  call i64 @syscall(i64 60, i64 %ec, i64 undef, i64 undef, i64 undef, i64 undef, i64 undef)
 
   ;stuff i need to sleep at night
   call void asm sideeffect "hlt", ""() noreturn
