@@ -33,4 +33,4 @@ int strcmp(char *a, char *b)
 //  etypes.o
 
 
-#endif
+#endif // LIBELX_H

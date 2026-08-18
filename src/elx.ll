@@ -8,6 +8,10 @@
 ; int -> i32
 ; long, size_t -> i64
 
+%size_t = type i64
+%ssize_t = type i64
+%umode_t = type i16
+
 ;implementing a syscall wrapper
 define i64 @syscall(i64 %call, i64 %rdi, i64 %rsi, i64 %rdx, i64 %r10, i64 %r8, i64 %r9) alwaysinline {
   %rax = call i64 asm sideeffect "syscall", "={rax},{rax},{rdi},{rsi},{rdx},{r10},{r8},{r9},~{rcx},~{r11}"(i64 %call, i64 %rdi, i64 %rsi, i64 %rdx, i64 %r10, i64 %r8, i64 %r9)
@@ -47,15 +51,28 @@ define void @exit(i64 %ec) alwaysinline noreturn {
 
 ;moving all of the asm wrapping to this file
 ;first of write for puts, printf etc...
-define external i64 @write(i64 %fd, ptr %buf, i64 %count) {
+define external %ssize_t @write(i64 %fd, ptr %buf, %size_t %count) {
   ;nob for number of bytes
-  %nob.w = call i64 @syscall(i64 1, i64 %fd, ptr %buf, i64 %count, i64 undef, i64 undef, i64 undef)
-  ret i64 %nob.w
+  %nob.w = call i64 @syscall(i64 1, i64 %fd, ptr %buf, %size_t %count, i64 undef, i64 undef, i64 undef)
+  ret %ssize_t %nob.w
 }
 
 ;read for getchar etc..
-define external i64 @read(i64 %fd, ptr %buf, i64 %count) {
+define external %ssize_t @read(i64 %fd, ptr %buf, %size_t %count) {
   ;number of bytes read
-  %nob.r = call i64 @syscall(i64 0, i64 %fd, ptr %buf, i64 %count, i64 undef, i64 undef, i64 undef)
-  ret i64 %nob.r
+  %nob.r = call i64 @syscall(i64 0, i64 %fd, ptr %buf, %size_t %count, i64 undef, i64 undef, i64 undef)
+  ret %ssize_t %nob.r
+}
+
+;wrapper for open
+define external i32 @open(ptr %filename, i32 %flags, %umode_t %mode) {
+  ;expanding shit to i64
+  %flags.64 = zext i32 %flags to i64
+  %mode.64 = zext %umode_t %mode to i64
+
+  ;call
+  %fd.64 = call i64 @syscall(i64 2, ptr %filename, i64 %flags.64, i64 %mode.64, i64 undef, i64 undef, i64 undef)
+  ;trunc for return
+  %fd = trunc i64 %fd.64 to i32
+  ret i32 %fd
 }
