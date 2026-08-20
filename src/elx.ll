@@ -76,3 +76,12 @@ define external i32 @open(ptr %filename, i32 %flags, %umode_t %mode) {
   %fd = trunc i64 %fd.64 to i32
   ret i32 %fd
 }
+
+;fclose
+define external i32 @close(i32 %fd) {
+  %fd.64 = zext i32 %fd to i64
+  ;rval
+  %rv.64 = call i64 @syscall(i64 3, i64 %fd.64, i64 undef, i64 undef, i64 undef, i64 undef, i64 undef)
+  %rv = trunc i64 %rv.64 to i32
+  ret i32 %rv
+}
