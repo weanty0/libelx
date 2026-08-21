@@ -9,6 +9,11 @@
 #define stdout 1
 #define stderr 2
 
+// structs
+typedef struct {
+  unsigned int fd;
+} FILE;
+
 //  elx.o
 void exit(int exitcode);
 ssize_t write(unsigned int fd, char *buf, size_t count);
@@ -22,6 +27,7 @@ int close(unsigned int fd);
 int putchar(int chr);
 int puts(char *str);
 int getchar(void);
+FILE *fopen(char *filename, int mode);
 
 //  math.o
 int abs(int n);

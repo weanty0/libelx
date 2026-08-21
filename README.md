@@ -35,6 +35,7 @@ int close(unsigned int fd);
 int putchar(int char);
 int puts(char *str);
 int getchar(void);
+FILE *fopen(char *filename, int mode);
 ```
 
 **string.ll**
