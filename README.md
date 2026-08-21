@@ -26,6 +26,8 @@ gcc -ffreestanding -nostdlib -static -no-pie -fno-stack-protector -e _start main
 void exit(int exitcode);
 ssize_t write(unsigned int fd, char *buf, size_t count);
 ssize_t read(unsigned int fd, char *buf, size_t count);
+int open(char *filename, int flags, umode_t mode);
+int close(unsigned int fd);
 ```
 
 **stdio.ll**

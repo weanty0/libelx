@@ -1,7 +1,7 @@
 ; BigJ would be proud
 
 ; int dabs(int n);
-define external i32 @dabs(i32 %n) {
+define external i32 @abs(i32 %n) {
   %is.neg = icmp slt i32 %n, 0
   br i1 %is.neg, label %nret, label %pret
 nret:

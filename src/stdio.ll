@@ -2,6 +2,10 @@
 
 %size_t = type i64
 %ssize_t = type i64
+%umode_t = type i16
+
+;basic file struct
+%FILE = type { i64 }
 
 ;int putchar(int c);
 define external i32 @putchar(i32 %chr) {
@@ -40,6 +44,22 @@ define external i32 @puts(ptr %str) {
   %nob_w = trunc %ssize_t %nob.w to i32
   ret i32 %nob_w
 }
+
+;FILE *fopen(char *name, char *mode) {i will just use an int}
+define external ptr @fopen(ptr %fname, i32 %mode) {
+  ;parsing the mode
+  %fd = call i32 @open(ptr %fname, i32 %mode, %umode_t 0)
+  %fd.64 = zext i32 %fd to i64
+
+  %f = alloca %FILE
+  %f.fd.ptr = getelementptr i64, ptr %f, i32 0
+  store i64 %fd.64, ptr %f.fd.ptr
+
+  ret ptr %f
+}
+
+declare i32 @open(ptr, i32, %umode_t)
+declare i32 @close(i32)
 
 declare %size_t @strlen(ptr)
 declare %ssize_t @write(i64, ptr, %size_t)

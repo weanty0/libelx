@@ -3,6 +3,7 @@
 
 #define size_t unsigned long
 #define ssize_t signed long
+#define umode_t unsigned short
 
 #define stdin 0
 #define stdout 1
@@ -12,6 +13,8 @@
 void exit(int exitcode);
 ssize_t write(unsigned int fd, char *buf, size_t count);
 ssize_t read(unsigned int fd, char *buf, size_t count);
+int open(const char *filename, int flags, umode_t mode);
+int close(unsigned int fd);
 
 //  stdlib.o
 
@@ -21,7 +24,7 @@ int puts(char *str);
 int getchar(void);
 
 //  math.o
-int dabs(int n);
+int abs(int n);
 double fabs(double n);
 
 //  string.o
