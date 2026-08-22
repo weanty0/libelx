@@ -28,6 +28,8 @@ int putchar(int chr);
 int puts(char *str);
 int getchar(void);
 FILE *fopen(char *filename, int mode);
+int fclose(FILE *stream);
+int fputs(char *str, FILE *stream);
 
 //  math.o
 int abs(int n);

@@ -36,6 +36,8 @@ int putchar(int char);
 int puts(char *str);
 int getchar(void);
 FILE *fopen(char *filename, int mode);
+int fclose(FILE *file);
+int fputs(char *str, FILE *stream);
 ```
 
 **string.ll**
