@@ -1,4 +1,3 @@
-CC       := clang
 LLC      := llc
 AR       := ar
 ARFLAGS  := rcs
@@ -18,7 +17,7 @@ $(TARGET): $(OBJ)
 	$(AR) $(ARFLAGS) $@ $^
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.ll | $(BUILD_DIR)
-	$(LLC) -filetype=obj $< -o $@
+	$(LLC) -filetype=obj -O2 $< -o $@
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)

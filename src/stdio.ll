@@ -1,11 +1,20 @@
 ;basically stdio.ll
 
+;basic file struct
+%FILE = type { i64 }
+
+@.stdin_struct  = global %FILE { i64 0 }
+@.stdout_struct = global %FILE { i64 1 }
+@.stderr_struct = global %FILE { i64 2 }
+
+@stdin = global  ptr @.stdin_struct
+@stdout = global ptr @.stdout_struct
+@stderr = global ptr @.stderr_struct
+
+
 %size_t = type i64
 %ssize_t = type i64
 %umode_t = type i16
-
-;basic file struct
-%FILE = type { i64 }
 
 ;int putchar(int c);
 define external i32 @putchar(i32 %chr) {
@@ -61,13 +70,31 @@ define external ptr @fopen(ptr %fname, i32 %mode) {
 ;int close(FILE *file)
 define external i32 @fclose(ptr %file) {
   ;getting the fd
-  %fd.ptr = getelementptr i64, ptr %file, i32 0
-  %fd.64 = load i64, ptr %fd.ptr
+  %fd.64 = call i64 @gfdff(ptr %file)
   %fd = trunc i64 %fd.64 to i32
 
   ;close the file
   %rv = call i32 @close(i32 %fd)
   ret i32 %rv
+}
+
+;int fputs(char *str, FILE *file)
+define external i32 @fputs(ptr %str, ptr %file){
+  ;getting fd
+  %fd.64 = call i64 @gfdff(ptr %file)
+
+  %len = call %size_t @strlen(ptr %str)
+  %nob.w = call %ssize_t @write(i64 %fd.64, ptr %str, %size_t %len)
+  %nob.w.32 = trunc %ssize_t %nob.w to i32
+  ret i32 %nob.w.32
+}
+
+; --- Helper funcs ---
+
+define private i64 @gfdff(ptr %file) {
+  %fd.ptr = getelementptr i64, ptr %file, i32 0
+  %fd.64 = load i64, ptr %fd.ptr
+  ret i64 %fd.64
 }
 
 declare i32 @open(ptr, i32, %umode_t)
