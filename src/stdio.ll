@@ -58,6 +58,18 @@ define external ptr @fopen(ptr %fname, i32 %mode) {
   ret ptr %f
 }
 
+;int close(FILE *file)
+define external i32 @fclose(ptr %file) {
+  ;getting the fd
+  %fd.ptr = getelementptr i64, ptr %file, i32 0
+  %fd.64 = load i64, ptr %fd.ptr
+  %fd = trunc i64 %fd.64 to i32
+
+  ;close the file
+  %rv = call i32 @close(i32 %fd)
+  ret i32 %rv
+}
+
 declare i32 @open(ptr, i32, %umode_t)
 declare i32 @close(i32)
 

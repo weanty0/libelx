@@ -1,7 +1,7 @@
 ;When I started working on this project, only god knew how it worked. Today, Nothing has changed
 ;Anyone contributing to this, increse the counter. ty
 ;
-;Total hours wasted on this dumpsterfire: 8
+;Total hours wasted on this dumpsterfire: 9
 ;
 ;Implemented with x86_64 asm
 
