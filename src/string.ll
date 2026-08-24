@@ -80,8 +80,13 @@ define external i32 @issuffix(ptr %str, ptr %suf) {
 entry:
   %sufflen = call %size_t @strlen(ptr %suf)
   %len = call %size_t @strlen(ptr %str)
+  %is.valid.len = icmp ugt %size_t %len, %sufflen
+  br i1 %is.valid.len, label %body, label %err
+body:
   %offset = sub %size_t %len, %sufflen
   %check = getelementptr i8, ptr %str, %size_t %offset
   %rv = call i32 @strcmp(ptr %check, ptr %suf)
   ret i32 %rv
+err:
+  ret i32 -1
 }
