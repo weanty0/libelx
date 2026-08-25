@@ -71,7 +71,7 @@ good:
   br i1 %is.full, label %nahbro, label %havesex
 havesex:
   %fd.64 = zext i32 %fd to i64
-  %f = getelementptr ptr, ptr @.filestack, i32 0, i32 %slot
+  %f = getelementptr ptr, ptr @.filestack, i32 %slot
   %f.fd.ptr = getelementptr i64, ptr %f, i32 0
   store i64 %fd.64, ptr %f.fd.ptr
   ;this mentally hurts
@@ -88,6 +88,21 @@ define external i32 @fclose(ptr %file) {
 
   ;close the file
   %rv = call i32 @close(i32 %fd)
+
+  ;free the stack. yeyy...
+  %stack.base = getelementptr ptr, ptr @.filestack, i32 0
+  %f.i.n.g = ptrtoint ptr %file to i64
+  %stack.bi = ptrtoint ptr %stack.base to i64
+  %offs = sub i64 %f.i.n.g, %stack.bi
+  %i.64 = udiv i64 %offs, 8
+  %i = trunc i64 %i.64 to i32
+  %range = icmp ult i32 %i, 16
+  br i1 %range, label %freets, label %bippityboppityboo
+freets:
+  %used.ptr = getelementptr i8, ptr @.filestack.used, i32 %i
+  store i8 0, ptr %used.ptr
+  br label %bippityboppityboo
+bippityboppityboo:
   ret i32 %rv
 }
 
@@ -134,7 +149,7 @@ chk:
   %full = icmp eq i32 %i, 16
   br i1 %full, label %brim, label %cond
 cond:
-  %used.ptr = getelementptr ptr, ptr @.filestack.used, i32 0, i32 %i
+  %used.ptr = getelementptr ptr, ptr @.filestack.used, i32 %i
   %used.v = load i8, ptr %used.ptr
   %is.free = icmp eq i8 %used.v, 0
   br i1 %is.free, label %free, label %post
