@@ -3,6 +3,11 @@
 ;basic file struct
 %FILE = type { i64 }
 
+;filecache
+@.filestack = global [ 16 x %FILE ] zeroinitializer
+@.filestack.used = global [ 16 x i8 ] zeroinitializer
+
+;std
 @.stdin_struct  = global %FILE { i64 0 }
 @.stdout_struct = global %FILE { i64 1 }
 @.stderr_struct = global %FILE { i64 2 }
@@ -11,7 +16,7 @@
 @stdout = global ptr @.stdout_struct
 @stderr = global ptr @.stderr_struct
 
-
+;types
 %size_t = type i64
 %ssize_t = type i64
 %umode_t = type i16
@@ -56,15 +61,23 @@ define external i32 @puts(ptr %str) {
 
 ;FILE *fopen(char *name, char *mode) {i will just use an int}
 define external ptr @fopen(ptr %fname, i32 %mode) {
-  ;parsing the mode
   %fd = call i32 @open(ptr %fname, i32 %mode, %umode_t 0)
+  ;test if open didnt get a stroke
+  %is.good = icmp sge i32 %fd, 0
+  br i1 %is.good, label %good, label %nahbro
+good:
+  %slot = call i32 @_allocate_slot()
+  %is.full = icmp eq i32 %slot, -1
+  br i1 %is.full, label %nahbro, label %havesex
+havesex:
   %fd.64 = zext i32 %fd to i64
-
-  %f = alloca %FILE
+  %f = getelementptr ptr, ptr @.filestack, i32 0, i32 %slot
   %f.fd.ptr = getelementptr i64, ptr %f, i32 0
   store i64 %fd.64, ptr %f.fd.ptr
-
+  ;this mentally hurts
   ret ptr %f
+nahbro:
+  ret ptr null
 }
 
 ;int close(FILE *file)
@@ -89,12 +102,50 @@ define external i32 @fputs(ptr %str, ptr %file){
   ret i32 %nob.w.32
 }
 
+;char *fgets(char *buf, size_t len, FILE *stream);
+define external ptr @fgets(ptr %buf, %size_t %len, ptr %stream) {
+  ;gettin fd
+  %fd = call i64 @gfdff(ptr %stream)
+  %lenm1 = sub %size_t %len, 1
+  %nob.r = call %ssize_t @read(i64 %fd, ptr %buf, %size_t %lenm1)
+  %is.good = icmp sge %ssize_t %nob.r, 0
+  br i1 %is.good, label %pass, label %err
+pass:
+  %bufl.p = getelementptr i8, ptr %buf, %ssize_t %nob.r
+  store i8 0, ptr %bufl.p
+  ret ptr %buf
+err:
+  ret ptr null
+}
+
 ; --- Helper funcs ---
 
-define private i64 @gfdff(ptr %file) {
+define i64 @gfdff(ptr %file) {
   %fd.ptr = getelementptr i64, ptr %file, i32 0
   %fd.64 = load i64, ptr %fd.ptr
   ret i64 %fd.64
+}
+
+; --- stack ---
+define internal i32 @_allocate_slot() {
+  br label %chk
+chk:
+  %i = phi i32 [ 0, %0 ], [ %i_next, %post ]
+  %full = icmp eq i32 %i, 16
+  br i1 %full, label %brim, label %cond
+cond:
+  %used.ptr = getelementptr ptr, ptr @.filestack.used, i32 0, i32 %i
+  %used.v = load i8, ptr %used.ptr
+  %is.free = icmp eq i8 %used.v, 0
+  br i1 %is.free, label %free, label %post
+free:
+  store i8 1, ptr %used.ptr
+  ret i32 %i
+post:
+  %i_next = add i32 %i, 1
+  br label %chk
+brim:
+  ret i32 -1
 }
 
 declare i32 @open(ptr, i32, %umode_t)
