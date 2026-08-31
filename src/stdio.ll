@@ -133,6 +133,28 @@ err:
   ret ptr null
 }
 
+;int fputc(int c, FILE *stream);
+define external i32 @fputc(i32 %c, ptr %stream) {
+  %fd = call i64 @gfdff(ptr %stream)
+  %buf = alloca i8
+  %chr = trunc i32 %c to i8
+  store i8 %chr, ptr %buf
+
+  %nobw = call %ssize_t @write(i64 %fd, ptr %buf, %size_t 1)
+  %nob.w = trunc i64 %nobw to i32
+  ret i32 %nob.w
+}
+
+;int fgetc(FILE *stream);
+define external i32 @fgetc(ptr %stream) {
+  %fd = call i64 @gfdff(ptr %stream)
+  %buf = alloca i8
+
+  %nobr = call %ssize_t @read(i64 %fd, ptr %buf, %size_t 1)
+  %nob.r = trunc %ssize_t %nobr to i32
+  ret i32 %nob.r
+}
+
 ; --- Helper funcs ---
 
 define i64 @gfdff(ptr %file) {
