@@ -20,36 +20,5 @@ Compilation
 gcc -ffreestanding -nostdlib -static -no-pie -fno-stack-protector -e _start main.c libelx.a -o main
 ```
 
-### Function call table (with c style function declaration)
-**elx.ll**
-```c
-void exit(int exitcode);
-ssize_t write(unsigned int fd, char *buf, size_t count);
-ssize_t read(unsigned int fd, char *buf, size_t count);
-int open(char *filename, int flags, umode_t mode);
-int close(unsigned int fd);
-```
-
-**stdio.ll**
-```c
-int putchar(int char);
-int puts(char *str);
-int getchar(void);
-FILE *fopen(char *filename, int mode);
-int fclose(FILE *file);
-int fputs(char *str, FILE *stream);
-```
-
-**string.ll**
-```c
-size_t strlen(char *str);
-char *strcpy(char *dest, char *str);
-char *strcat(char *dest, char *str);
-int strcmp(char *a, char *b)
-```
-
-**math.ll**
-```c
-int dabs(int n);
-double fabs(double n);
-```
+### Function call table
+Read the `docs/func.md`.
