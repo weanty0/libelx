@@ -5,6 +5,8 @@ ssize_t write(int fd, const char *buf, size_t len);
 ssize_t read(int fd, char *buf, size_t len);
 int open(const char *path, int flags, mode_t mode);
 int close(int fd);
+int rename(const char *old, const char *new);
+long creat(const char *path, mode_t mode);
 
 int putchar(int chr);
 int getchar();

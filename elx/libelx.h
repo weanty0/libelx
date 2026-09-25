@@ -31,10 +31,6 @@ FILE *fopen(char *filename, int mode);
 int fclose(FILE *stream);
 int fputs(char *str, FILE *stream);
 
-//  math.o
-int abs(int n);
-double fabs(double n);
-
 //  string.o
 size_t strlen(char *str);
 char *strcpy(char *dest, char *str);

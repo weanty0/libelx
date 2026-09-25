@@ -1,21 +1,19 @@
 ;stringy shit
 ;string.h
 
-%size_t = type i64
-
 ;size_t strlen(char* str);
-define external %size_t @strlen(ptr %str) {
+define external i64 @strlen(ptr %str) {
 entry:
   br label %loop
 loop:
-  %i = phi %size_t [ 0, %entry], [ %i.next, %loop ]   ;setting i to 0 or the i+1 depending on if it comes from entry or nay.
-  %i.next = add %size_t %i, 1
-  %char.ptr = getelementptr i8, ptr %str, %size_t %i  ;getting the ptr
+  %i = phi i64 [ 0, %entry], [ %i.next, %loop ]   ;setting i to 0 or the i+1 depending on if it comes from entry or nay.
+  %i.next = add i64 %i, 1
+  %char.ptr = getelementptr i8, ptr %str, i64 %i  ;getting the ptr
   %char = load i8, ptr %char.ptr                      ;loading char from the ptr
   %is.null = icmp eq i8 %char, 0                      ;checking if the char is a null terminator
   br i1 %is.null, label %return, label %loop
 return:
-  ret %size_t %i
+  ret i64 %i
 }
 
 ;char *strcpy(char *dest, char *str);
@@ -59,8 +57,8 @@ return:
 ;char *strcat(char *dest, char *src);
 define external ptr @strcat(ptr %dest, ptr %src) {
 entry:
-  %dest.len = call %size_t @strlen(ptr %dest)
-  %dest.strt = getelementptr i8, ptr %dest, %size_t %dest.len
+  %dest.len = call i64 @strlen(ptr %dest)
+  %dest.strt = getelementptr i8, ptr %dest, i64 %dest.len
   br label %loop
 loop:
   %i = phi i64 [ 0, %entry ], [ %i.next, %loop ]
@@ -78,13 +76,13 @@ return:
 ;int issuffix(char *str, char *suf);
 define external i32 @issuffix(ptr %str, ptr %suf) {
 entry:
-  %sufflen = call %size_t @strlen(ptr %suf)
-  %len = call %size_t @strlen(ptr %str)
-  %is.valid.len = icmp ugt %size_t %len, %sufflen
+  %sufflen = call i64 @strlen(ptr %suf)
+  %len = call i64 @strlen(ptr %str)
+  %is.valid.len = icmp ugt i64 %len, %sufflen
   br i1 %is.valid.len, label %body, label %err
 body:
-  %offset = sub %size_t %len, %sufflen
-  %check = getelementptr i8, ptr %str, %size_t %offset
+  %offset = sub i64 %len, %sufflen
+  %check = getelementptr i8, ptr %str, i64 %offset
   %rv = call i32 @strcmp(ptr %check, ptr %suf)
   ret i32 %rv
 err:
