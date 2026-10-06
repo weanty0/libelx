@@ -15,6 +15,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(AR) $(ARFLAGS) $@ $^
+	strip $(TARGET)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.ll | $(BUILD_DIR)
 	$(LLC) -filetype=obj -O2 $< -o $@
