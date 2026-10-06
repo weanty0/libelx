@@ -22,7 +22,7 @@
 %umode_t = type i16
 
 ;int putchar(int c);
-define external i32 @putchar(i32 %chr) {
+define i32 @putchar(i32 %chr) {
 	;truncating the 64 bit int to a char
 	%buf = alloca i8
 	%c = trunc i32 %chr to i8
@@ -42,7 +42,7 @@ err:
 
 ;yanking the character entered
 ;int getchar(void);
-define external i32 @getchar() {
+define i32 @getchar() {
 	%char = alloca [ 1 x i8 ]
 	call i64 @read(i64 0, ptr %char, i64 1)
 	%chr.ptr = getelementptr i32, ptr %char, i64 0
@@ -51,7 +51,7 @@ define external i32 @getchar() {
 }
 
 ;int puts(char* str)
-define external i32 @puts(ptr %str) {
+define i32 @puts(ptr %str) {
 	%len = call i64 @strlen(ptr %str)
 	;nob is short for number of bytes (written in this case)
 	%nob.w = call i64 @write(i64 1, ptr %str, i64 %len)
@@ -60,7 +60,7 @@ define external i32 @puts(ptr %str) {
 }
 
 ;FILE *fopen(char *name, char *mode) {i will just use an int}
-define external ptr @fopen(ptr %fname, i32 %mode) {
+define ptr @fopen(ptr %fname, i32 %mode) {
 	%fd = call i32 @open(ptr %fname, i32 %mode, i16 0)
 	;test if open didnt get a stroke
 	%is.good = icmp sge i32 %fd, 0
@@ -81,7 +81,7 @@ nahbro:
 }
 
 ;int close(FILE *file)
-define external i32 @fclose(ptr %file) {
+define i32 @fclose(ptr %file) {
 	;getting the fd
 	%fd.64 = call i64 @gfdff(ptr %file)
 	%fd = trunc i64 %fd.64 to i32
@@ -107,7 +107,7 @@ bippityboppityboo:
 }
 
 ;int fputs(char *str, FILE *file)
-define external i32 @fputs(ptr %str, ptr %file){
+define i32 @fputs(ptr %str, ptr %file){
 	;getting fd
 	%fd.64 = call i64 @gfdff(ptr %file)
 
@@ -118,7 +118,7 @@ define external i32 @fputs(ptr %str, ptr %file){
 }
 
 ;char *fgets(char *buf, size_t len, FILE *stream);
-define external ptr @fgets(ptr %buf, i64 %len, ptr %stream) {
+define ptr @fgets(ptr %buf, i64 %len, ptr %stream) {
 	;gettin fd
 	%fd = call i64 @gfdff(ptr %stream)
 	%lenm1 = sub i64 %len, 1
@@ -134,7 +134,7 @@ err:
 }
 
 ;int fputc(int c, FILE *stream);
-define external i32 @fputc(i32 %c, ptr %stream) {
+define i32 @fputc(i32 %c, ptr %stream) {
 	%fd = call i64 @gfdff(ptr %stream)
 	%buf = alloca i8
 	%chr = trunc i32 %c to i8
@@ -146,13 +146,55 @@ define external i32 @fputc(i32 %c, ptr %stream) {
 }
 
 ;int fgetc(FILE *stream);
-define external i32 @fgetc(ptr %stream) {
-  	%fd = call i64 @gfdff(ptr %stream)
-  	%buf = alloca i8
+define i32 @fgetc(ptr %stream) {
+  %fd = call i64 @gfdff(ptr %stream)
+  %buf = alloca i8
 
 	%nobr = call i64 @read(i64 %fd, ptr %buf, i64 1)
 	%nob.r = trunc i64 %nobr to i32
 	ret i32 %nob.r
+}
+
+;int putu(int x);
+define i32 @putu(i32 %x) {
+entry:
+  %isui = icmp sge i32 %x, 0
+  br i1 %isui, label %alloc, label %err
+alloc:
+  %buf = alloca [ 11 x i8 ]
+  br label %loop
+loop:
+  %i = phi i32 [ 9, %alloc ], [ %inext, %shiftY ]
+  %y = phi i32 [ %x, %alloc ], [ %ynext, %shiftY ]
+  %inext = sub i32 %i, 1
+  %cptr = getelementptr i8, ptr %buf, i32 %i
+  %lsbit = srem i32 %x, 10
+  %cint = trunc i32 %lsbit to i8
+  %char = add i8 %cint, 48
+  store i8 %char, ptr %cptr
+
+  %putq = icmp eq i32 %y, 0
+  br i1 %putq, label %put, label %shiftY
+shiftY:
+  %yMlsbit = sub i32 %y, %lsbit
+  %ynext = udiv i32 %yMlsbit, 10
+  br label %loop
+put:
+  %isFul = icmp eq i32 %i, 0
+  br i1 %isFul, label %printUint, label %fZ
+fZ:
+  %j = phi i32 [ %i, %put ], [ %jnext, %fZ ]
+  %chptr = getelementptr i8, ptr %buf, i32 %j
+  store i8 0, ptr %chptr
+  %jnext = sub i32 %j, 1
+  %isJnul = icmp eq i32 %j, 0
+  br i1 %isJnul, label %printUint, label %fZ
+printUint:
+  %nNobw = call i64 @write(i64 1, ptr %buf, i64 11)
+  %nobw = trunc i64 %nNobw to i32
+  ret i32 %nobw
+err:
+  ret i32 -1
 }
 
 ; --- Helper funcs ---
