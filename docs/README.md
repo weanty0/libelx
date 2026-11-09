@@ -5,9 +5,18 @@ Note: This lib is still early in development, so it may be buggy and it is incom
 This lib is implemented with `x86_64 asm`.
 
 ### Building
+##### Compiling nob
+This project uses [nob](github.com/tsoding/nob.h) as it's build system. Meaning you must have a c compiler installed.
 ```sh
-make        #builds obj files inside of build/, and also the libelx.a
-make clean  #cleans up build and libelx
+cc -o nob nob.c
+./nob
+```
+
+##### Arguments
+```sh
+./nob       #behaves as ./nob all
+./nob all   #builds obj files inside of build/, and also the libelx.a
+./nob clean #cleans up build and libelx
 ```
 
 ### Using libelx in C
