@@ -6,7 +6,7 @@ This lib is implemented with `x86_64 asm`.
 
 ### Building
 ##### Compiling nob
-This project uses [nob](github.com/tsoding/nob.h) as it's build system. Meaning you must have a c compiler installed.
+This project uses [nob](https://github.com/tsoding/nob.h) as it's build system. Meaning you must have a c compiler installed.
 ```sh
 cc -o nob nob.c
 ./nob
